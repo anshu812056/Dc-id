@@ -574,6 +574,6 @@ def _resume_saved_processes():
 
 if __name__ == "__main__":
     _resume_saved_processes()
-    port = int(os.environ.get("PORT", 21949))
+    port = int(os.environ.get("PORT", 25436))
     print(f"[Server] Starting on http://0.0.0.0:{port}")
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
