@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Deactivate id Server</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#0b0e14;color:#e2e8f0}
+
+/* ── Header ── */
+.top-header{background:#0f1219;border-bottom:1px solid #1e2533;position:sticky;top:0;z-index:100}
+.header-inner{max-width:720px;margin:0 auto;padding:16px 20px 0}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.brand-icon{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#2563eb);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff}
+.brand-text h1{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.brand-text span{font-size:10px;color:#64748b;letter-spacing:1.2px;text-transform:uppercase}
+.header-tabs{display:flex;gap:10px;padding-bottom:12px}
+.htab{padding:10px 24px;border:none;background:#1a1f2e;color:#94a3b8;font-size:14px;font-weight:700;cursor:pointer;border-radius:8px;transition:.2s;position:relative}
+.htab.active{background:#2563eb;color:#fff}
+.htab:hover:not(.active){color:#fff;background:#252d3d}
+.dot-indicator{display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-left:6px;vertical-align:middle}
+
+/* ── Main ── */
+.main-content{max-width:720px;margin:0 auto;padding:28px 20px 80px}
+
+/* ── Step Wizard ── */
+.step-wizard{display:flex;align-items:center;justify-content:center;margin-bottom:28px;padding:16px 0}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px}
+.step-circle{width:38px;height:38px;border-radius:50%;border:2.5px solid #2d3548;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#64748b;background:#141820;transition:.3s}
+.step.active .step-circle{border-color:#2563eb;color:#60a5fa;background:#141820}
+.step.done .step-circle{border-color:#10b981;background:#10b981;color:#fff}
+.step-label{font-size:10px;font-weight:700;letter-spacing:.6px;color:#64748b;text-transform:uppercase}
+.step.active .step-label{color:#60a5fa}
+.step-line{width:70px;height:2px;background:#2d3548;margin:0 6px;margin-bottom:22px;transition:.3s}
+.step-line.done{background:#10b981}
+
+/* ── Section ── */
+.section-title{font-size:20px;font-weight:700;color:#f1f5f9;margin-bottom:6px}
+.section-desc{font-size:13px;color:#94a3b8;margin-bottom:18px;line-height:1.5}
+
+/* ── Card ── */
+.card{background:#141820;border:1px solid #1e2533;border-radius:12px;padding:26px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.card-header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+
+/* ── Form ── */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:600;color:#e2e8f0;margin-bottom:7px}
+.label-hint{font-weight:400;color:#64748b;font-size:12px}
+.field input,.field textarea,.field select{width:100%;background:#0f1219;border:1px solid #2d3548;border-radius:8px;color:#e2e8f0;font-size:13px;padding:11px 13px;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit;resize:vertical}
+.field input:focus,.field textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.field textarea{min-height:160px;font-family:'Courier New',monospace;font-size:13px}
+.field-hint{font-size:11px;color:#64748b;margin-top:5px}
+input[type=file]{cursor:pointer;padding:9px;color:#94a3b8}
+
+/* ── Cookie Mode ── */
+.cookie-mode-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.mode-label{font-size:14px;font-weight:700;color:#e2e8f0}
+.mode-toggle{display:flex;border:1px solid #2d3548;border-radius:6px;overflow:hidden}
+.mode-btn{padding:10px 22px;border:none;background:#1a1f2e;color:#94a3b8;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:7px}
+.mode-btn.active{background:#2563eb;color:#fff}
+.mode-btn:hover:not(.active){background:#252d3d;color:#e2e8f0}
+
+/* ── Range ── */
+.range-wrap{display:flex;align-items:center;gap:12px}
+.range-wrap input[type=range]{flex:1;-webkit-appearance:none;height:5px;border-radius:3px;background:#2d3548;outline:none;border:none;padding:0}
+.range-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#2563eb;cursor:pointer;box-shadow:0 2px 6px rgba(37,99,235,.35)}
+.range-val{font-size:15px;font-weight:700;color:#60a5fa;min-width:40px;text-align:right}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;width:100%}
+.btn-primary{background:#2563eb;color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.35)}
+.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-danger{background:#ef4444;color:#fff}
+.btn-danger:hover{background:#dc2626}
+.btn-outline{background:transparent;border:1px solid #2d3548;color:#e2e8f0;width:auto;padding:8px 16px;font-size:12px}
+.btn-outline:hover{background:#1a1f2e;border-color:#2563eb;color:#60a5fa}
+.btn-sm{padding:8px 14px;font-size:12px}
+
+/* ── Alerts ── */
+.alert{padding:11px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;animation:fadeIn .3s ease}
+.alert-success{background:#052e16;border:1px solid #166534;color:#86efac}
+.alert-error{background:#450a0a;border:1px solid #7f1d1d;color:#fca5a5}
+.alert-info{background:#172554;border:1px solid #1e40af;color:#93c5fd}
+.alert-warn{background:#422006;border:1px solid #78350f;color:#fde68a}
+.alert-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Key Box ── */
+.key-box{background:#052e16;border:1px solid #166534;border-radius:10px;padding:18px;margin-bottom:18px}
+.key-title{font-size:12px;font-weight:700;color:#86efac;margin-bottom:8px}
+.key-row{display:flex;gap:8px;align-items:center}
+.key-val{flex:1;background:#0f1219;border:1px solid #166534;border-radius:6px;padding:9px 12px;font-family:'Courier New',monospace;font-size:12px;color:#86efac;word-break:break-all;user-select:all}
+.copy-btn{background:#2563eb;border:none;color:#fff;border-radius:6px;padding:9px 14px;cursor:pointer;font-size:12px;font-weight:700;transition:.2s}
+.copy-btn:hover{background:#1d4ed8}
+.key-warn{font-size:11px;color:#86efac;margin-top:7px}
+
+/* ── Stats Grid ── */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+.stat-box{background:#1a1f2e;border:1px solid #2d3548;border-radius:8px;padding:14px;text-align:center}
+.stat-val{font-size:26px;font-weight:800;color:#60a5fa}
+.stat-val.red{color:#f87171}
+.stat-val.green{color:#34d399}
+.stat-val-sm{font-size:11px;font-weight:700;color:#60a5fa;font-family:'Courier New',monospace;word-break:break-all}
+.stat-lbl{font-size:10px;color:#64748b;margin-top:3px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+
+/* ── Progress ── */
+.prog-label{font-size:11px;color:#64748b;margin-bottom:5px}
+.prog-wrap{height:5px;background:#2d3548;border-radius:3px;overflow:hidden;margin-bottom:14px}
+.prog-bar{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);border-radius:3px;transition:width .4s ease;min-width:4px}
+
+/* ── Last message ── */
+.last-msg{background:#1a1f2e;border:1px solid #2d3548;border-radius:8px;padding:11px 13px;font-size:12px;color:#94a3b8;word-break:break-word;min-height:38px}
+.status-badge{margin-top:10px;font-size:12px;color:#94a3b8}
+
+/* ── Guide Card ── */
+.guide-card{background:#1c1a0e;border:1px solid #3d3510;border-radius:12px;padding:22px;margin-top:18px}
+.guide-card h3{font-size:15px;font-weight:700;color:#fde68a;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.guide-card ol{list-style:none;counter-reset:guide;padding:0}
+.guide-card li{counter-increment:guide;display:flex;align-items:center;gap:8px;padding:7px 0;font-size:13px;color:#fde68a}
+.guide-card li::before{content:counter(guide) ".";font-weight:700;color:#fbbf24;min-width:18px}
+.guide-icon{font-size:16px}
+.guide-link{background:#2563eb;color:#fff;padding:2px 9px;border-radius:4px;text-decoration:none;font-weight:600;font-size:12px}
+.highlight{background:#422006;padding:2px 7px;border-radius:4px;font-weight:600;font-size:12px;color:#fde68a;border:1px solid #78350f}
+.highlight-blue{background:#172554;color:#93c5fd;padding:2px 7px;border-radius:4px;font-weight:600;font-size:12px;border:1px solid #1e40af}
+
+/* ── Task Card ── */
+/* Keep every task as an independent block. The list layout prevents
+   refreshed cards from visually collapsing into one another. */
+#tasks-list{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+.task-card{display:block;position:relative;width:100%;height:auto;min-height:0;flex:0 0 auto;clear:both;border:1px solid #2d3548;border-left:4px solid #2563eb;border-radius:12px;padding:20px;margin:0;background:#141820;overflow:visible}
+.task-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0}
+.task-card-header.expanded{margin-bottom:14px}
+.task-name{font-size:17px;font-weight:700;color:#f1f5f9}
+.running-badge{background:#052e16;color:#86efac;padding:4px 12px;border-radius:16px;font-size:11px;font-weight:700;letter-spacing:.4px;border:1px solid #166534}
+.stopped-badge{background:#450a0a;color:#fca5a5;padding:4px 12px;border-radius:16px;font-size:11px;font-weight:700;letter-spacing:.4px;border:1px solid #7f1d1d}
+.task-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.task-stat-box{background:#1a1f2e;border:1px solid #2d3548;border-radius:8px;padding:12px;text-align:center}
+.task-stat-val{font-size:22px;font-weight:800}
+.task-stat-val.blue{color:#60a5fa}
+.task-stat-val.red{color:#f87171}
+.task-stat-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.4px;margin-top:3px;font-weight:600}
+.task-details{font-size:13px;color:#cbd5e1;line-height:1.9}
+.task-details strong{color:#f1f5f9}
+.task-last-msg{margin-top:10px;background:#1a1f2e;border:1px solid #2d3548;border-radius:8px;padding:10px 12px;font-size:12px;color:#94a3b8;word-break:break-word}
+.task-actions{display:flex;gap:10px;margin-top:14px}
+.task-actions-collapsed{display:flex;gap:10px;margin-top:10px}
+.btn-edit{padding:9px 22px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.btn-edit:hover{background:#1d4ed8}
+.btn-stop-task{padding:9px 22px;background:transparent;color:#f87171;border:1px solid #f87171;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.btn-stop-task:hover{background:#450a0a}
+.btn-view{padding:9px 22px;background:transparent;color:#60a5fa;border:1px solid #60a5fa;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.btn-view:hover{background:#172554}
+
+/* ── Badge ── */
+.badge{display:inline-flex;align-items:center;gap:4px;background:#172554;border:1px solid #1e40af;border-radius:16px;padding:3px 10px;font-size:11px;font-weight:700;color:#93c5fd}
+
+/* ── Spinner ── */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid #2d3548;border-top-color:#60a5fa;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Live dot ── */
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 5px #10b981;animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+/* ── Tasks ── */
+.tasks-loading{text-align:center;padding:28px;color:#64748b;font-size:13px}
+.tasks-empty{text-align:center;padding:36px 18px;color:#64748b}
+.empty-icon{font-size:36px;margin-bottom:10px}
+.empty-title{font-size:14px;font-weight:600;margin-bottom:5px}
+.empty-desc{font-size:12px}
+
+.task-detail-body{display:none;margin-top:14px}
+.task-detail-body.show{display:block}
+.task-date{font-size:11px;color:#64748b;margin-top:4px}
+
+.hidden{display:none!important}
+.panel{animation:fadeIn .3s ease}
+
+@media(max-width:500px){
+  .stats-grid,.task-stats{grid-template-columns:1fr 1fr}
+  .step-line{width:36px}
+  .header-inner{padding:12px 14px 0}
+  .main-content{padding:18px 14px 60px}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="top-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5 3.66 9.15 8.44 9.9v-7H7.9v-2.9h2.54V9.85c0-2.52 1.49-3.93 3.78-3.93 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33v7a10 10 0 008.44-9.9c0-5.53-4.5-10.02-10-10.02z"/></svg></div>
+      <div class="brand-text">
+        <h1>Messenger / tool :)</h1>
+        <span>Messenger group Automation</span>
+      </div>
+    </div>
+    <div class="header-tabs" style="display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;gap:10px">
+        <button class="htab active" id="htab-setup" onclick="switchTab('start')">Create New Tasks</button>
+        <button class="htab" id="htab-tasks" onclick="switchTab('tasks')">Running Tasks <span class="dot-indicator" id="tasks-dot"></span></button>
+      </div>
+      <button id="dark-mode-btn" onclick="toggleDarkMode()" style="padding:8px 14px;border:1px solid #2d3548;border-radius:8px;background:#1a1f2e;color:#fde68a;font-size:13px;font-weight:600;cursor:pointer;transition:.2s">🌙 Dark</button>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+  <!-- ═══════════ SETUP PANEL ═══════════ -->
+  <div id="panel-start" class="panel">
+
+    <!-- Step Wizard -->
+    <div class="step-wizard">
+      <div class="step active" id="step-1">
+        <div class="step-circle">1</div>
+        <div class="step-label">CONNECT</div>
+      </div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step" id="step-2">
+        <div class="step-circle">2</div>
+        <div class="step-label">CONFIGURE</div>
+      </div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step" id="step-3">
+        <div class="step-circle">3</div>
+        <div class="step-label">LAUNCH</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: Connect -->
+    <div id="card-cookies">
+      <h2 class="section-title">Connect your account</h2>
+      <p class="section-desc">Facebook cookies paste karo ya file upload karo —<br>JSON ya raw format dono chalega.</p>
+
+      <div class="card">
+        <div class="cookie-mode-row">
+          <span class="mode-label">Cookie Mode:</span>
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="tog-single" onclick="setCookieMode('single')">👥 Single</button>
+            <button class="mode-btn" id="tog-multi" onclick="setCookieMode('multi')">👥 Multi</button>
+          </div>
+        </div>
+
+        <!-- Single Mode: Paste -->
+        <div class="field" id="single-cookie-field">
+          <label id="cookie-label">🍪 <strong>Cookie Paste Karo</strong> <span class="label-hint">(JSON ya raw format)</span></label>
+          <textarea id="cookie-input" placeholder='[{"key":"c_user","value":"..."},
+{"key":"xs","value":"..."},...]
+
+Ya phir raw format:
+c_user=123; xs=abc; ...' style="min-height:160px"></textarea>
+          <p class="field-hint">ℹ️ Ek account ki cookies — JSON array ya semicolon-separated raw string</p>
+        </div>
+
+        <!-- Multi Mode: File Upload -->
+        <div class="field hidden" id="multi-cookie-field">
+          <label>🍪 <strong>Multi Cookies File Upload</strong> <span class="label-hint">(.txt — ek line = ek account ki cookies)</span></label>
+          <div style="border:2px dashed #2d3548;border-radius:10px;padding:30px 20px;text-align:center;background:#0f1219;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+            <div style="font-size:36px">📁</div>
+            <p style="font-size:13px;color:#94a3b8;margin:0">Cookie file (.txt) yahan upload karo</p>
+            <p style="font-size:11px;color:#64748b;margin:0">Ek line = ek account ki cookies</p>
+            <input type="file" id="cookie-file-input" accept=".txt,text/plain" onchange="onCookieFileChange()" style="margin-top:8px">
+          </div>
+          <div id="cookie-file-info" class="field-hint" style="margin-top:8px"></div>
+        </div>
+
+        <div id="login-msg"></div>
+
+        <button class="btn btn-primary" id="btn-login" onclick="doValidate()">Verify Cookie</button>
+      </div>
+
+      <!-- Cookie Guide -->
+      <div class="guide-card">
+        <h3>📖 Cookie Kaise Nikalein? (Via Browser)</h3>
+        <ol>
+          <li><span class="guide-icon">💬</span> <a href="https://messenger.com" target="_blank" class="guide-link">Messenger.com</a> me login karo.</li>
+          <li><span class="guide-icon">🛡️</span> Browser ke left side me jo <span class="highlight">Shield icon</span> hai (🛡️), us par tap karo.</li>
+          <li><span class="guide-icon">🍪</span> <span class="highlight">"View Cookies"</span> par click karo.</li>
+          <li><span class="guide-icon">📋</span> Saari cookies <span class="highlight">copy</span> karo.</li>
+          <li><span class="guide-icon">📥</span> Cookie box me paste karo aur <span class="highlight-blue">Verify Cookie</span> par click karo.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- STEP 2: Configure (hidden) -->
+    <div class="hidden" id="card-config">
+      <h2 class="section-title">Configure your bot</h2>
+      <p class="section-desc">Target group set karo, messages load karo, aur speed adjust karo.</p>
+
+      <div class="card">
+        <div id="accounts-info" style="margin-bottom:14px"></div>
+
+        <div class="field">
+          <label>📝 Task Name <span class="label-hint">(Is task ka naam do)</span>:</label>
+          <input type="text" id="task-name" placeholder="e.g. Morning Campaign">
+        </div>
+
+        <div class="field">
+          <label>🎯 Target Group / Chat UID:</label>
+          <input type="text" id="thread-id" placeholder="e.g. 2085212892429458">
+        </div>
+
+        <div class="field">
+          <label>📄 Message File (.txt — ek line ek message):</label>
+          <input type="file" id="msg-file" accept=".txt,text/plain" onchange="onFileChange()">
+          <div id="file-info" class="field-hint"></div>
+        </div>
+
+        <div class="field">
+          <label>👤 Hater Name <span class="label-hint">(message ke aage lagega → "Name message")</span>:</label>
+          <input type="text" id="hater-name" placeholder="Prefix Name">
+        </div>
+
+        <div class="field">
+          <label>⏱ Delay <span class="label-hint">(seconds between messages)</span>:</label>
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
+            <input type="number" id="speed-input" min="0.5" max="300" step="0.5" value="2" style="width:100px;text-align:center" oninput="document.getElementById('speed-range').value=this.value;document.getElementById('speed-val').textContent=this.value+'s'">
+            <span style="color:#64748b;font-size:12px">seconds</span>
+          </div>
+          <div class="range-wrap">
+            <input type="range" id="speed-range" min="0.5" max="300" step="0.5" value="2" oninput="document.getElementById('speed-val').textContent=this.value+'s';document.getElementById('speed-input').value=this.value">
+            <span class="range-val" id="speed-val">2s</span>
+          </div>
+          <div class="field-hint">Range: 0.5s – 300s</div>
+        </div>
+
+        <div id="start-msg"></div>
+
+        <button class="btn btn-primary" id="btn-start" onclick="doStart()">⚡ Start Sending</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Running (hidden) -->
+    <div class="hidden" id="card-running">
+      <h2 class="section-title">🟢 Live Status</h2>
+
+      <div class="card">
+        <div class="key-box">
+          <div class="key-title">🔑 Your Stop Key — Save this!</div>
+          <div class="key-row">
+            <div class="key-val" id="display-key">—</div>
+            <button class="copy-btn" onclick="copyKey()">Copy</button>
+          </div>
+          <p class="key-warn">⚠️ Is key se hi process stop hogi. Kho mat dena!</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box" style="grid-column:span 2">
+            <div class="stat-val-sm" id="st-taskid">—</div>
+            <div class="stat-lbl">Task ID</div>
+          </div>
+          <div class="stat-box" style="grid-column:span 2">
+            <div class="stat-val" id="st-uptime" style="font-size:15px">0 days 00:00:00</div>
+            <div class="stat-lbl">⏱ Uptime</div>
+          </div>
+          <div class="stat-box"><div class="stat-val" id="st-sent">0</div><div class="stat-lbl">SENT</div></div>
+          <div class="stat-box"><div class="stat-val red" id="st-failed">0</div><div class="stat-lbl">FAILED</div></div>
+          <div class="stat-box"><div class="stat-val" id="st-cookies">0</div><div class="stat-lbl">COOKIES</div></div>
+          <div class="stat-box"><div class="stat-val" id="st-speed">—</div><div class="stat-lbl">SPEED</div></div>
+        </div>
+
+        <div class="prog-label">Message loop progress:</div>
+        <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+        <div class="last-msg" id="last-msg-display">Waiting for first message...</div>
+
+        <div id="run-status-badge" class="status-badge"></div>
+
+        <div style="margin-top:14px">
+          <button class="btn-outline" style="padding:8px 16px;border:1px solid #2d3548;border-radius:8px;background:transparent;color:#e2e8f0;font-size:12px;font-weight:600;cursor:pointer" onclick="startNewSession()">+ New Session</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel-start -->
+
+  <!-- ═══════════ TASKS PANEL ═══════════ -->
+  <div id="panel-tasks" class="panel hidden">
+
+    <div class="card">
+      <div class="card-header-row">
+        <h2 class="section-title" style="margin-bottom:0">Active Tasks</h2>
+        <button class="btn-outline" style="padding:7px 14px;border:1px solid #2d3548;border-radius:8px;background:transparent;color:#e2e8f0;font-size:12px;font-weight:600;cursor:pointer" onclick="loadTasks()">🔄 Refresh</button>
+      </div>
+      <div id="tasks-loading" class="tasks-loading hidden">
+        <span class="spinner"></span> Loading tasks...
+      </div>
+      <div id="tasks-list"></div>
+      <div id="tasks-empty" class="tasks-empty hidden">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">Koi Active Task Nahi</div>
+        <div class="empty-desc">Abhi koi process nahi chal raha</div>
+      </div>
+    </div>
+
+  </div><!-- /panel-tasks -->
+
+  <!-- ═══════════ STOP PANEL ═══════════ -->
+  <div id="panel-stop" class="panel hidden">
+
+    <div class="card">
+      <h2 class="section-title">Stop a Running Process</h2>
+      <p class="section-desc">Woh stop key paste karo jo start karte waqt mili thi. Sirf us process ka kaam rukega — baki sab chalta rahega.</p>
+
+      <div class="field">
+        <label>🔑 Stop Key:</label>
+        <input type="text" id="stop-key-input" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+      </div>
+
+      <div id="stop-msg"></div>
+
+      <button class="btn btn-danger" id="btn-stop" onclick="doStop()">🛑 Stop This Process</button>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:14px">Check Status</h3>
+      <div class="field">
+        <label>🔑 Stop Key:</label>
+        <input type="text" id="check-key-input" placeholder="Paste stop key here">
+      </div>
+      <div id="check-msg"></div>
+      <button class="btn btn-outline" style="width:100%" onclick="doCheck()">🔍 Check Status</button>
+    </div>
+
+  </div><!-- /panel-stop -->
+
+</main>
+
+<script>
+// ─── State ───────────────────────────────────────────────────────────────────
+let cookieMode='single',validatedOk=false,currentKey=null,fileContent='';
+let localTasks=[];
+let uptimeIntervals={};
+
+// ─── Helper: Get current date string ─────────────────────────────────────────
+function getCurrentDateStr(){
+  const now=new Date();
+  const dd=String(now.getDate()).padStart(2,'0');
+  const mm=String(now.getMonth()+1).padStart(2,'0');
+  const yyyy=now.getFullYear();
+  const hh=String(now.getHours()).padStart(2,'0');
+  const min=String(now.getMinutes()).padStart(2,'0');
+  const ss=String(now.getSeconds()).padStart(2,'0');
+  return `${dd}/${mm}/${yyyy} ${hh}:${min}:${ss}`;
+}
+
+// ─── Helper: Format uptime from start timestamp ──────────────────────────────
+function formatUptime(startTime){
+  const now=Date.now();
+  let diff=Math.floor((now-startTime)/1000);
+  if(diff<0)diff=0;
+  const days=Math.floor(diff/86400);
+  diff%=86400;
+  const hrs=String(Math.floor(diff/3600)).padStart(2,'0');
+  diff%=3600;
+  const mins=String(Math.floor(diff/60)).padStart(2,'0');
+  const secs=String(diff%60).padStart(2,'0');
+  return `${days} days ${hrs}:${mins}:${secs}`;
+}
+
+// ─── Tab switching ────────────────────────────────────────────────────────────
+function switchTab(t){
+  document.getElementById('panel-start').classList.toggle('hidden',t!=='start');
+  document.getElementById('panel-tasks').classList.toggle('hidden',t!=='tasks');
+  document.getElementById('panel-stop').classList.toggle('hidden',t!=='stop');
+  document.getElementById('htab-setup').classList.toggle('active',t==='start');
+  document.getElementById('htab-tasks').classList.toggle('active',t==='tasks');
+  if(t==='tasks'){loadTasksFromServer()}
+}
+
+// ─── Server Tasks Management ──────────────────────────────────────────────────
+// Task records are kept on the server. localTasks is only an in-memory view.
+function updateLocalTask(taskId,updates){
+  const t=localTasks.find(x=>x.task_id===taskId);
+  if(t){
+    Object.assign(t,updates);
+  }
+}
+
+async function loadTasksFromServer(shouldRender=true){
+  try{
+    const previousSignature=localTasks.map(t=>`${t.task_id}:${t.running}`).join('|');
+    const res=await fetch('/api/tasks',{cache:'no-store'});
+    const data=await res.json();
+    if(!res.ok||!data.ok)throw new Error(data.error||'Could not load tasks');
+    localTasks=Array.isArray(data.tasks)?data.tasks:[];
+    const nextSignature=localTasks.map(t=>`${t.task_id}:${t.running}`).join('|');
+    if(shouldRender||previousSignature!==nextSignature)renderTasks();
+    updateTasksDot();
+    return localTasks;
+  }catch(e){
+    localTasks=[];
+    if(shouldRender)renderTasks();
+    updateTasksDot();
+    return [];
+  }
+}
+
+// ─── Safe text rendering ──────────────────────────────────────────────────────
+// Task names, messages and other values can come from user/server input.
+// Escaping them before inserting HTML prevents one task's content from
+// breaking the following task-card markup.
+function escapeHtml(value){
+  return String(value??'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
+
+// ─── Render Tasks (Collapsed: Name + Stop + View Details) ─────────────────────
+function renderTasks(){
+  const list=document.getElementById('tasks-list');
+  const empty=document.getElementById('tasks-empty');
+  const loading=document.getElementById('tasks-loading');
+  if(loading)loading.classList.add('hidden');
+
+  if(!localTasks.length){
+    list.innerHTML='';
+    if(empty)empty.classList.remove('hidden');
+    return;
+  }
+  if(empty)empty.classList.add('hidden');
+
+  list.innerHTML=localTasks.map(t=>{
+    const taskId=escapeHtml(t.task_id||'');
+    const taskName=escapeHtml(t.task_name||'Unnamed Task');
+    const createdDate=escapeHtml(t.created_date||'—');
+    const sentCount=escapeHtml(t.sent_count||0);
+    const failedCount=escapeHtml(t.failed_count||0);
+    const totalCookies=escapeHtml(t.total_cookies||0);
+    const totalMessages=escapeHtml(t.total_messages||1);
+    const threadId=escapeHtml(t.thread_id||'—');
+    const haterName=escapeHtml(t.hater_name||'—');
+    const speed=escapeHtml(t.speed||0);
+    const startTimestamp=escapeHtml(t.start_timestamp||'');
+    const lastMessage=escapeHtml(t.last_message||'No message sent yet');
+    const statusBadge=t.running?'<span class="running-badge">RUNNING</span>':'<span class="stopped-badge">STOPPED</span>';
+    return `
+      <article class="task-card" id="task-card-${taskId}">
+        <div class="task-card-header">
+          <div>
+             <div class="task-name">${taskName}</div>
+             <div class="task-date">📅 ${createdDate}</div>
+          </div>
+          ${statusBadge}
+        </div>
+
+        <div class="task-actions-collapsed">
+           <button class="btn-view" onclick="toggleTaskDetails('${taskId}')">👁 View Details</button>
+           <button class="btn-stop-task" onclick="stopLocalTask('${taskId}',this)">Stop</button>
+        </div>
+         <div class="task-detail-body" id="task-details-${taskId}">
+          <div class="task-stats">
+             <div class="task-stat-box"><div class="task-stat-val blue" id="task-sent-${taskId}">${sentCount}</div><div class="task-stat-lbl">SENT</div></div>
+             <div class="task-stat-box"><div class="task-stat-val red" id="task-failed-${taskId}">${failedCount}</div><div class="task-stat-lbl">FAILED</div></div>
+             <div class="task-stat-box"><div class="task-stat-val blue" id="task-cookies-${taskId}">${totalCookies}</div><div class="task-stat-lbl">COOKIES</div></div>
+             <div class="task-stat-box"><div class="task-stat-val blue">${totalMessages}</div><div class="task-stat-lbl">MESSAGES</div></div>
+          </div>
+          <div class="task-details">
+             <strong>Target:</strong> ${threadId}<br>
+            <strong>Type:</strong> Group<br>
+             <strong>Sender:</strong> ${haterName}<br>
+             <strong>Speed:</strong> ${speed}s<br>
+             <strong>Started:</strong> ${createdDate}<br>
+             <strong>Uptime:</strong> <span id="task-uptime-${taskId}">${t.running?formatUptime(t.start_timestamp):'Stopped'}</span><br>
+             <strong>🔑 Key:</strong> <span style="color:#86efac;font-family:monospace;word-break:break-all;user-select:all">${taskId}</span>
+          </div>
+          <div style="margin-top:14px;background:#1a1f2e;border:1px solid #2d3548;border-radius:8px;padding:12px">
+            <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:6px">💬 Last Message Sent</div>
+             <div style="font-size:12px;color:#94a3b8;word-break:break-word" id="task-lastmsg-${taskId}">${lastMessage}</div>
+          </div>
+        </div>
+       </article>`;
+  }).join('');
+
+  // Start uptime counters for running tasks
+  Object.keys(uptimeIntervals).forEach(k=>{clearInterval(uptimeIntervals[k]);delete uptimeIntervals[k]});
+  localTasks.forEach(t=>{
+    if(t.running&&t.start_timestamp){
+      uptimeIntervals[t.task_id]=setInterval(()=>{
+        const el=document.getElementById(`task-uptime-${t.task_id}`);
+        if(el)el.textContent=formatUptime(t.start_timestamp);
+      },1000);
+    }
+  });
+}
+
+function toggleTaskDetails(taskId){
+  const el=document.getElementById(`task-details-${taskId}`);
+  if(el){
+    el.classList.toggle('show');
+  }
+}
+
+function stopLocalTask(taskId,btn){
+  const t=localTasks.find(x=>x.task_id===taskId);
+  if(t){
+    if(uptimeIntervals[taskId]){clearInterval(uptimeIntervals[taskId]);delete uptimeIntervals[taskId]}
+    // Also try API stop
+    fetch('/api/stop',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stop_key:taskId})}).catch(()=>{});
+    // The server removes explicitly stopped tasks from its shared task list.
+    loadTasksFromServer();
+  }
+}
+
+function loadTasks(){
+  loadTasksFromServer();
+}
+
+// ─── Cookie mode ──────────────────────────────────────────────────────────────
+let cookieFileContent='';
+function setCookieMode(m){
+  cookieMode=m;
+  document.getElementById('tog-single').classList.toggle('active',m==='single');
+  document.getElementById('tog-multi').classList.toggle('active',m==='multi');
+  document.getElementById('single-cookie-field').classList.toggle('hidden',m!=='single');
+  document.getElementById('multi-cookie-field').classList.toggle('hidden',m!=='multi');
+  validatedOk=false;document.getElementById('card-config').classList.add('hidden');
+}
+
+function onCookieFileChange(){
+  const f=document.getElementById('cookie-file-input').files[0];if(!f){cookieFileContent='';return}
+  const r=new FileReader();r.onload=e=>{cookieFileContent=e.target.result;const lines=cookieFileContent.split('\n').filter(l=>l.trim());document.getElementById('cookie-file-info').textContent=`✅ ${lines.length} accounts loaded from "${f.name}"`};r.readAsText(f);
+}
+
+// ─── File reader ──────────────────────────────────────────────────────────────
+function onFileChange(){
+  const f=document.getElementById('msg-file').files[0];if(!f){fileContent='';return}
+  const r=new FileReader();r.onload=e=>{fileContent=e.target.result;const lines=fileContent.split('\n').filter(l=>l.trim());document.getElementById('file-info').textContent=`✅ ${lines.length} messages loaded from "${f.name}"`};r.readAsText(f);
+}
+
+// ─── Alert helpers ────────────────────────────────────────────────────────────
+function alert_(c,type,icon,msg){const el=document.getElementById(c);if(el)el.innerHTML=`<div class="alert alert-${type}"><span class="alert-icon">${icon}</span><span>${msg}</span></div>`}
+function clearAlert(id){const el=document.getElementById(id);if(el)el.innerHTML=''}
+
+// ─── Step wizard ──────────────────────────────────────────────────────────────
+function updateSteps(current){
+  ['step-1','step-2','step-3'].forEach((id,i)=>{const el=document.getElementById(id);if(el){el.classList.remove('active','done');if(i+1<current)el.classList.add('done');else if(i+1===current)el.classList.add('active')}});
+  ['line-1','line-2'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.classList.toggle('done',i+1<current)});
+}
+
+// ─── Validate ─────────────────────────────────────────────────────────────────
+async function doValidate(){
+  let raw='';
+  if(cookieMode==='single'){raw=document.getElementById('cookie-input').value.trim();if(!raw){alert_('login-msg','error','⚠️','Cookies paste karo!');return}}
+  else{raw=cookieFileContent.trim();if(!raw){alert_('login-msg','error','⚠️','Cookie file upload karo!');return}}
+  const btn=document.getElementById('btn-login');btn.innerHTML='<span class="spinner"></span> Validating...';btn.disabled=true;clearAlert('login-msg');
+  try{
+    const res=await fetch('/api/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cookies:raw,multi:cookieMode==='multi'})});
+    const data=await res.json();
+    if(!data.ok){alert_('login-msg','error','❌',data.error||'Validation failed');btn.innerHTML='Verify Cookie';btn.disabled=false;return}
+    const ids=data.user_ids||[];
+    document.getElementById('accounts-info').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">${ids.map(id=>`<span class="badge">👤 ${id}</span>`).join(' ')}<span style="font-size:12px;color:#64748b">${ids.length} account${ids.length>1?'s':''} ready</span></div>`;
+    alert_('login-msg','success','✅',`${ids.length} account${ids.length>1?'s':''} validated! MQTT connect ready.`);
+    validatedOk=true;
+
+    // Hide Step 1 (cookie card), show Step 2 (config card)
+    document.getElementById('card-cookies').classList.add('hidden');
+    document.getElementById('card-config').classList.remove('hidden');
+    document.getElementById('card-config').scrollIntoView({behavior:'smooth',block:'start'});
+    updateSteps(2);
+
+    btn.innerHTML='✅ Verified';btn.style.background='#10b981';btn.disabled=false;
+  }catch(e){alert_('login-msg','error','❌','Network error: '+e.message);btn.innerHTML='Verify Cookie';btn.disabled=false}
+}
+
+// ─── Start ────────────────────────────────────────────────────────────────────
+async function doStart(){
+  if(!validatedOk){alert_('start-msg','warn','⚠️','Pehle cookies validate karo!');return}
+  const taskName=document.getElementById('task-name').value.trim();
+  const threadId=document.getElementById('thread-id').value.trim();
+  const haterName=document.getElementById('hater-name').value.trim();
+  const speed=parseFloat(document.getElementById('speed-input').value||document.getElementById('speed-range').value);
+  const cookies=cookieMode==='single'?document.getElementById('cookie-input').value.trim():cookieFileContent.trim();
+  const messages=fileContent;
+
+  if(!taskName){alert_('start-msg','error','⚠️','Task name dalo!');return}
+  if(!threadId){alert_('start-msg','error','⚠️','Group/Chat UID dalo!');return}
+  if(!messages){alert_('start-msg','error','⚠️','Message file select karo!');return}
+  const msgLines=messages.split('\n').filter(l=>l.trim());if(!msgLines.length){alert_('start-msg','error','⚠️','File mein koi message nahi mila!');return}
+
+  const btn=document.getElementById('btn-start');btn.innerHTML='<span class="spinner"></span> Connecting MQTT &amp; Starting...';btn.disabled=true;clearAlert('start-msg');
+
+  try{
+    const res=await fetch('/api/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cookies,thread_id:threadId,messages,speed,hater_name:haterName,task_name:taskName,multi_cookie:cookieMode==='multi'})});
+    const data=await res.json();
+    if(!data.ok){alert_('start-msg','error','❌',data.error||'Start failed');btn.innerHTML='⚡ Start Sending';btn.disabled=false;return}
+    currentKey=data.stop_key;document.getElementById('display-key').textContent=currentKey;
+    document.getElementById('st-speed').textContent=speed+'s';document.getElementById('st-taskid').textContent=currentKey;
+    document.getElementById('st-uptime').textContent='0 days 00:00:00';document.getElementById('st-cookies').textContent='—';document.getElementById('st-failed').textContent='0';document.getElementById('st-sent').textContent='0';
+
+    // Hide Step 2 (config), show Step 3 (running)
+    document.getElementById('card-config').classList.add('hidden');
+    document.getElementById('card-running').classList.remove('hidden');
+    document.getElementById('card-running').scrollIntoView({behavior:'smooth',block:'start'});
+    updateSteps(3);
+
+    alert_('start-msg','success','🚀','Process started!');btn.innerHTML='✅ Running...';btn.style.background='#10b981';
+    await loadTasksFromServer();
+    startPolling(currentKey);startLocalUptime(currentKey);
+  }catch(e){alert_('start-msg','error','❌','Network error: '+e.message);btn.innerHTML='⚡ Start Sending';btn.disabled=false}
+}
+
+// ─── Local Uptime for Step 3 ──────────────────────────────────────────────────
+let localUptimeTimer=null;
+let localStartTime=null;
+function startLocalUptime(key){
+  localStartTime=Date.now();
+  if(localUptimeTimer)clearInterval(localUptimeTimer);
+  localUptimeTimer=setInterval(()=>{
+    const el=document.getElementById('st-uptime');
+    if(el)el.textContent=formatUptime(localStartTime);
+  },1000);
+}
+
+// ─── Poll for the CURRENT active task (Step 3 Live Status panel) ──────────────
+let pollTimer=null;
+let pollingActive=false;
+
+function startPolling(key){
+  if(pollTimer){clearTimeout(pollTimer);pollTimer=null}
+  pollingActive=true;
+  pollLoop(key);
+}
+function stopPolling(){
+  pollingActive=false;
+  if(pollTimer){clearTimeout(pollTimer);pollTimer=null}
+}
+function pollLoop(key){
+  if(!pollingActive)return;
+  pollStatus(key).finally(()=>{
+    if(pollingActive){
+      pollTimer=setTimeout(()=>pollLoop(key),2000);
+    }
+  });
+}
+
+async function pollStatus(key){
+  try{
+    const res=await fetch(`/api/status/${key}`);
+    if(!res.ok)return;
+    let data;
+    try{data=await res.json()}catch(e){return}
+    if(!data.ok)return;
+
+    // Step 3 Running panel update — only update from server values
+    const stSent=document.getElementById('st-sent');
+    const stFailed=document.getElementById('st-failed');
+    const stCookies=document.getElementById('st-cookies');
+    const stSpeed=document.getElementById('st-speed');
+    const stTaskid=document.getElementById('st-taskid');
+    const progBar=document.getElementById('prog-bar');
+    const lastMsgDisplay=document.getElementById('last-msg-display');
+    const sb=document.getElementById('run-status-badge');
+
+    if(stSent) stSent.textContent=data.sent_count||0;
+    if(stFailed) stFailed.textContent=data.failed_count||0;
+    if(stCookies) stCookies.textContent=data.total_cookies||0;
+    if(stSpeed) stSpeed.textContent=(data.speed||0)+'s';
+    if(stTaskid && data.task_id) stTaskid.textContent=data.task_id;
+
+    const pct=data.total_messages>0?Math.round((data.current_index/data.total_messages)*100):0;
+    if(progBar) progBar.style.width=pct+'%';
+    if(lastMsgDisplay && data.last_message) lastMsgDisplay.textContent='💬 '+data.last_message;
+
+    // Update the in-memory view; the server remains the source of truth.
+    updateLocalTask(key,{
+      sent_count:data.sent_count||0,
+      failed_count:data.failed_count||0,
+      total_cookies:data.total_cookies||0,
+      last_message:data.last_message||'',
+      last_status:data.status||''
+    });
+
+    // Also update Tasks tab DOM elements if they exist
+    const sentEl=document.getElementById(`task-sent-${key}`);
+    if(sentEl) sentEl.textContent=data.sent_count||0;
+    const failedEl=document.getElementById(`task-failed-${key}`);
+    if(failedEl) failedEl.textContent=data.failed_count||0;
+    const cookiesEl=document.getElementById(`task-cookies-${key}`);
+    if(cookiesEl) cookiesEl.textContent=data.total_cookies||0;
+    const lastMsgEl=document.getElementById(`task-lastmsg-${key}`);
+    if(lastMsgEl && data.last_message) lastMsgEl.textContent=data.last_message;
+
+    if(sb){
+      if(data.running){
+        sb.innerHTML='<span class="live-dot"></span> &nbsp;Status: <b style="color:#10b981">'+data.status+'</b>';
+      } else {
+        sb.innerHTML='<span style="color:#ef4444">● Stopped</span>';
+        stopPolling();
+        if(localUptimeTimer)clearInterval(localUptimeTimer);
+        updateLocalTask(key,{running:false});
+        renderTasks();
+      }
+    }
+  }catch(e){
+    // Network error — silently ignore, will retry next cycle
+  }
+}
+
+// ─── Background polling for ALL running tasks ─────────────────────────────────
+// This ensures the Running Tasks page always shows live counts, even after refresh
+let bgPollTimer=null;
+
+function startBackgroundPolling(){
+  if(bgPollTimer){clearInterval(bgPollTimer);bgPollTimer=null}
+  // Poll all running tasks every 3 seconds
+  bgPollTimer=setInterval(()=>{
+    refreshAllRunningTasks();
+  },3000);
+  // Also run immediately
+  refreshAllRunningTasks();
+}
+
+async function refreshAllRunningTasks(){
+  // Rehydrate from the shared server first so tasks started in another
+  // browser appear here without relying on that browser's local storage.
+  await loadTasksFromServer(false);
+  const runningTasks=localTasks.filter(t=>t.running);
+  if(!runningTasks.length)return;
+
+  for(const task of runningTasks){
+    try{
+      const res=await fetch(`/api/status/${task.task_id}`);
+      if(!res.ok)continue;
+      let data;
+      try{data=await res.json()}catch(e){continue}
+      if(!data.ok)continue;
+
+      // Refresh the in-memory view with server truth
+       const updates={
+        sent_count:data.sent_count||0,
+        failed_count:data.failed_count||0,
+        total_cookies:data.total_cookies||0,
+        last_message:data.last_message||'',
+        last_status:data.status||''
+      };
+
+      if(!data.running){
+        updates.running=false;
+      }
+
+       updateLocalTask(task.task_id,updates);
+
+      // Update DOM elements in Tasks tab if they exist
+      const sentEl=document.getElementById(`task-sent-${task.task_id}`);
+      if(sentEl) sentEl.textContent=data.sent_count||0;
+      const failedEl=document.getElementById(`task-failed-${task.task_id}`);
+      if(failedEl) failedEl.textContent=data.failed_count||0;
+      const cookiesEl=document.getElementById(`task-cookies-${task.task_id}`);
+      if(cookiesEl) cookiesEl.textContent=data.total_cookies||0;
+      const lastMsgEl=document.getElementById(`task-lastmsg-${task.task_id}`);
+      if(lastMsgEl && data.last_message) lastMsgEl.textContent=data.last_message;
+
+      // If task stopped on server, update badge in DOM
+      if(!data.running){
+        const cardEl=document.getElementById(`task-card-${task.task_id}`);
+        if(cardEl){
+          const badge=cardEl.querySelector('.running-badge');
+          if(badge){
+            badge.className='stopped-badge';
+            badge.textContent='STOPPED';
+          }
+        }
+      }
+    }catch(e){
+      // Network error for this task — skip, will retry next cycle
+    }
+  }
+
+  // Update tasks-dot indicator
+  updateTasksDot();
+}
+
+function updateTasksDot(){
+  const dot=document.getElementById('tasks-dot');
+  if(dot){
+    const hasRunning=localTasks.some(t=>t.running);
+    dot.style.background=hasRunning?'#10b981':'#64748b';
+  }
+}
+
+// ─── On page load: restore polling for running tasks ──────────────────────────
+function restoreOnLoad(){
+  // Rehydrate the shared task list from the server on every page load.
+  loadTasksFromServer().then(()=>startBackgroundPolling());
+}
+restoreOnLoad();
+
+// ─── Copy key ─────────────────────────────────────────────────────────────────
+function copyKey(){const key=document.getElementById('display-key').textContent;if(!key||key==='—')return;navigator.clipboard.writeText(key).then(()=>{const b=document.querySelector('.copy-btn');b.textContent='✅ Copied!';setTimeout(()=>b.textContent='Copy',1500)})}
+
+// ─── Stop ─────────────────────────────────────────────────────────────────────
+async function doStop(){
+  const key=document.getElementById('stop-key-input').value.trim();if(!key){alert_('stop-msg','warn','⚠️','Stop key dalo!');return}
+  const btn=document.getElementById('btn-stop');btn.innerHTML='<span class="spinner"></span> Stopping...';btn.disabled=true;clearAlert('stop-msg');
+  try{const res=await fetch('/api/stop',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stop_key:key})});const data=await res.json();if(!data.ok)alert_('stop-msg','error','❌',data.error||'Stop failed');else{alert_('stop-msg','success','✅',data.message||'Process stopped!');document.getElementById('stop-key-input').value='';await loadTasksFromServer()}}
+  catch(e){alert_('stop-msg','error','❌','Network error: '+e.message)}
+  btn.innerHTML='🛑 Stop This Process';btn.disabled=false;
+}
+
+// ─── Check ────────────────────────────────────────────────────────────────────
+async function doCheck(){
+  const key=document.getElementById('check-key-input').value.trim();if(!key){alert_('check-msg','warn','⚠️','Key dalo!');return}clearAlert('check-msg');
+  try{const res=await fetch(`/api/status/${key}`);const data=await res.json();if(!data.ok){alert_('check-msg','error','❌',data.error||'Not found');return}
+    const icon=data.running?'🟢':'🔴';alert_('check-msg',data.running?'success':'info','',`${icon} Status: <b>${data.status}</b><br>⏱ Uptime: <b>${data.uptime||'—'}</b> | Speed: <b>${data.speed}s</b><br>🍪 Cookies: <b>${data.total_cookies||0}</b> | ✅ Sent: <b>${data.sent_count}</b> | ❌ Failed: <b>${data.failed_count||0}</b><br>🧵 Thread: <b>${data.thread_id}</b>`)}
+  catch(e){alert_('check-msg','error','❌','Network error: '+e.message)}
+}
+
+// ─── New session ──────────────────────────────────────────────────────────────
+function startNewSession(){
+  stopPolling();if(localUptimeTimer)clearInterval(localUptimeTimer);currentKey=null;validatedOk=false;
+  document.getElementById('card-running').classList.add('hidden');document.getElementById('card-config').classList.add('hidden');
+  document.getElementById('card-cookies').classList.remove('hidden');
+  document.getElementById('cookie-input').value='';document.getElementById('thread-id').value='';document.getElementById('hater-name').value='';document.getElementById('task-name').value='';cookieFileContent='';
+  const cookieFileInput=document.getElementById('cookie-file-input');
+  if(cookieFileInput)cookieFileInput.value='';
+  const cookieFileInfo=document.getElementById('cookie-file-info');
+  if(cookieFileInfo)cookieFileInfo.textContent='';
+  document.getElementById('msg-file').value='';document.getElementById('speed-range').value='2';document.getElementById('speed-val').textContent='2s';document.getElementById('speed-input').value='2';
+  document.getElementById('file-info').textContent='';document.getElementById('st-sent').textContent='0';document.getElementById('st-failed').textContent='0';
+  document.getElementById('st-cookies').textContent='0';document.getElementById('st-speed').textContent='—';document.getElementById('st-uptime').textContent='0 days 00:00:00';
+  document.getElementById('st-taskid').textContent='—';document.getElementById('prog-bar').style.width='0%';document.getElementById('last-msg-display').textContent='Waiting for first message...';
+  fileContent='';clearAlert('login-msg');clearAlert('start-msg');updateSteps(1);
+  const btn=document.getElementById('btn-login');btn.innerHTML='Verify Cookie';btn.style.background='';btn.disabled=false;
+  const btn2=document.getElementById('btn-start');btn2.innerHTML='⚡ Start Sending';btn2.style.background='';btn2.disabled=false;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.getElementById('speed-range').addEventListener('input',function(){document.getElementById('speed-val').textContent=this.value+'s'});
+
+// ─── Dark/Light Mode Toggle ──────────────────────────────────────────────────
+let isDark=true;
+const darkCSS={
+  body:'#0b0e14',bodyColor:'#e2e8f0',
+  header:'#0f1219',headerBorder:'#1e2533',
+  card:'#141820',cardBorder:'#1e2533',
+  input:'#0f1219',inputBorder:'#2d3548',inputColor:'#e2e8f0',
+  tab:'#1a1f2e',tabColor:'#94a3b8',
+  modeBtn:'#1a1f2e',modeBtnColor:'#94a3b8',
+  stepCircle:'#141820',stepBorder:'#2d3548',stepColor:'#64748b',
+  sectionTitle:'#f1f5f9',sectionDesc:'#94a3b8',
+  guide:'#1c1a0e',guideBorder:'#3d3510',guideText:'#fde68a',
+  statBox:'#1a1f2e',statBorder:'#2d3548',
+  rangeBg:'#2d3548'
+};
+const lightCSS={
+  body:'#f0f2f5',bodyColor:'#1e293b',
+  header:'#0f172a',headerBorder:'#1e293b',
+  card:'#ffffff',cardBorder:'#e2e8f0',
+  input:'#ffffff',inputBorder:'#cbd5e1',inputColor:'#1e293b',
+  tab:'#1e293b',tabColor:'#cbd5e1',
+  modeBtn:'#ffffff',modeBtnColor:'#475569',
+  stepCircle:'#ffffff',stepBorder:'#e2e8f0',stepColor:'#94a3b8',
+  sectionTitle:'#0f172a',sectionDesc:'#64748b',
+  guide:'#fef9e7',guideBorder:'#f5e6b8',guideText:'#78350f',
+  statBox:'#f8fafc',statBorder:'#e2e8f0',
+  rangeBg:'#e2e8f0'
+};
+
+function toggleDarkMode(){
+  isDark=!isDark;
+  const t=isDark?darkCSS:lightCSS;
+  const btn=document.getElementById('dark-mode-btn');
+  btn.innerHTML=isDark?'🌙 Dark':'☀️ Light';
+  btn.style.background=isDark?'#1a1f2e':'#e2e8f0';
+  btn.style.color=isDark?'#fde68a':'#1e293b';
+  btn.style.borderColor=isDark?'#2d3548':'#cbd5e1';
+
+  document.body.style.background=t.body;
+  document.body.style.color=t.bodyColor;
+
+  document.querySelector('.top-header').style.background=t.header;
+  document.querySelector('.top-header').style.borderColor=t.headerBorder;
+
+  document.querySelectorAll('.card').forEach(c=>{c.style.background=t.card;c.style.borderColor=t.cardBorder});
+  document.querySelectorAll('.field input,.field textarea,.field select').forEach(el=>{el.style.background=t.input;el.style.borderColor=t.inputBorder;el.style.color=t.inputColor});
+  document.querySelectorAll('.htab:not(.active)').forEach(el=>{el.style.background=t.tab;el.style.color=t.tabColor});
+  document.querySelectorAll('.mode-btn:not(.active)').forEach(el=>{el.style.background=t.modeBtn;el.style.color=t.modeBtnColor});
+  document.querySelectorAll('.step-circle').forEach(el=>{el.style.background=t.stepCircle;el.style.borderColor=t.stepBorder;el.style.color=t.stepColor});
+  document.querySelectorAll('.section-title').forEach(el=>el.style.color=t.sectionTitle);
+  document.querySelectorAll('.section-desc').forEach(el=>el.style.color=t.sectionDesc);
+  document.querySelectorAll('.guide-card').forEach(el=>{el.style.background=t.guide;el.style.borderColor=t.guideBorder});
+  document.querySelectorAll('.guide-card h3,.guide-card li').forEach(el=>el.style.color=t.guideText);
+  document.querySelectorAll('.stat-box,.task-stat-box').forEach(el=>{el.style.background=t.statBox;el.style.borderColor=t.statBorder});
+  document.querySelectorAll('.step-line').forEach(el=>el.style.background=isDark?'#2d3548':'#e2e8f0');
+  document.querySelectorAll('.range-wrap input[type=range]').forEach(el=>el.style.background=t.rangeBg);
+  document.querySelectorAll('.mode-label,.field label').forEach(el=>el.style.color=isDark?'#e2e8f0':'#1e293b');
+  document.querySelectorAll('.last-msg,.task-last-msg').forEach(el=>{el.style.background=isDark?'#1a1f2e':'#f8fafc';el.style.borderColor=isDark?'#2d3548':'#e2e8f0';el.style.color=isDark?'#94a3b8':'#64748b'});
+}
+</script>
+</body>
+</html>
